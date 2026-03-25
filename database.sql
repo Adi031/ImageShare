@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
+    remember_token VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -15,7 +16,7 @@ CREATE TABLE IF NOT EXISTS categories (
 );
 
 INSERT IGNORE INTO categories (name) VALUES 
-('Nature'), ('Technology'), ('Art'), ('Games'), ('Cars'), ('Architecture'), ('Fashion'), ('Food');
+('Nature'), ('Technology'), ('Art'), ('Games'), ('Cars'), ('Architecture'), ('Bikes'), ('Food');
 
 CREATE TABLE IF NOT EXISTS images (
     id INT AUTO_INCREMENT PRIMARY KEY,

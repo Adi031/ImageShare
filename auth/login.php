@@ -17,6 +17,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (password_verify($password, $user['password_hash'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
+            
+            // Generate 1-Week Persistent Cookie Token
+            $token = bin2hex(random_bytes(32));
+            $update_stmt = $conn->prepare("UPDATE users SET remember_token = ? WHERE id = ?");
+            $update_stmt->bind_param("si", $token, $user['id']);
+            $update_stmt->execute();
+            
+            // Save cookie for exactly 7 days
+            setcookie('remember_token', $token, time() + (86400 * 7), "/");
+            
             header("Location: ../index.php");
             exit();
         } else {

@@ -71,29 +71,11 @@ if (!$img) {
 </head>
 <body>
 
-<header>
-    <div class="navbar">
-        <div class="logo"><a href="index.php">ImageShare</a></div>
-        <ul class="nav_links">
-            <li><a href="index.php">Home</a></li>
-            <?php if ($user_id): ?>
-                <li><a href="profile.php">Profile</a></li>
-            <?php endif; ?>
-        </ul>
-        <div>
-            <?php if ($user_id): ?>
-                <a href="upload.php" class="action_btn">Upload</a>
-                <a href="auth/logout.php" class="action_btn logout_btn">Logout</a>
-            <?php else: ?>
-                <a href="auth/login.php" class="action_btn">Login</a>
-            <?php endif; ?>
-        </div>
+<div class="container-fluid d-flex flex-column align-items-center justify-content-center" style="min-height: 100vh; padding: 20px;">
+    <div class="w-100 mb-3" style="max-width: 1300px;">
+        <a href="javascript:history.back()" class="btn" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 30px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s;" onmouseover="this.style.background='rgba(0,0,0,0.8)'" onmouseout="this.style.background='rgba(0,0,0,0.6)'"><i class="fas fa-arrow-left"></i> Back to Gallery</a>
     </div>
-</header>
-
-<div class="container-fluid py-4" style="max-width: 1400px; margin: 20px auto 0;">
-    <a href="javascript:history.back()" class="btn" style="background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.5);"><i class="fas fa-arrow-left"></i> Back to Gallery</a>
-    <div class="view-container">
+    <div class="view-container" style="width: 100%; max-width: 1300px; margin: 0; height: 85vh; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.8);">
         <div class="view-image">
             <img src="image.php?id=<?php echo $img['id']; ?>" alt="<?php echo htmlspecialchars($img['title']); ?>">
         </div>
