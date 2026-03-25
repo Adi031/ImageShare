@@ -24,31 +24,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $category_id = (!empty($_POST['category_id'])) ? $_POST['category_id'] : null;
     $tags = $_POST['tags'];
     
-    // Check if file was uploaded without errors
     if (isset($_FILES["image"]) && $_FILES["image"]["error"] == 0) {
         $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
         $filename = $_FILES["image"]["name"];
         $filetype = $_FILES["image"]["type"];
         $filesize = $_FILES["image"]["size"];
     
-        // Verify file extension
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
         if (!array_key_exists(strtolower($ext), $allowed)) {
             $error = "Error: Please select a valid file format.";
         }
     
-        // Verify file size - 30MB maximum (leaving a small 2MB buffer safely under MySQL 32M packet)
         $maxsize = 30 * 1024 * 1024;
         if ($filesize > $maxsize) {
             $error = "Error: File size is larger than the allowed 30MB limit.";
         }
     
-        // Verify MYME type of the file
         if (empty($error) && in_array($filetype, $allowed)) {
-            // Read binary data
             $image_data = file_get_contents($_FILES["image"]["tmp_name"]);
             
-            // insert into db
             $stmt = $conn->prepare("INSERT INTO images (user_id, category_id, title, description, tags, image_data, mime_type) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmt->bind_param("iisssss", $_SESSION['user_id'], $category_id, $title, $description, $tags, $image_data, $filetype);
             

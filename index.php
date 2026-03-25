@@ -2,7 +2,6 @@
 session_start();
 include 'db.php';
 
-// Fetch categories for the filter
 $cats = [];
 $res_c = $conn->query("SELECT * FROM categories ORDER BY name ASC");
 if ($res_c) {
@@ -11,7 +10,6 @@ if ($res_c) {
     }
 }
 
-// Fetch images logic with search
 $images = [];
 $query = "SELECT i.*, c.name as category_name FROM images i LEFT JOIN categories c ON i.category_id = c.id WHERE 1=1";
 $params = [];

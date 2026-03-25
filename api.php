@@ -13,24 +13,21 @@ $action = $_POST['action'] ?? '';
 $image_id = $_POST['image_id'] ?? 0;
 
 if ($action === 'like') {
-    // Check if already liked
     $stmt = $conn->prepare("SELECT * FROM likes WHERE user_id = ? AND image_id = ?");
     $stmt->bind_param("ii", $user_id, $image_id);
     $stmt->execute();
     if ($stmt->get_result()->num_rows > 0) {
-        // Unlike
         $stmt_del = $conn->prepare("DELETE FROM likes WHERE user_id = ? AND image_id = ?");
         $stmt_del->bind_param("ii", $user_id, $image_id);
         $stmt_del->execute();
         $is_liked = false;
     } else {
-        // Like
         $stmt_ins = $conn->prepare("INSERT INTO likes (user_id, image_id) VALUES (?, ?)");
         $stmt_ins->bind_param("ii", $user_id, $image_id);
         $stmt_ins->execute();
         $is_liked = true;
     }
-    // Get total likes
+    
     $stmt_cnt = $conn->prepare("SELECT COUNT(*) as cnt FROM likes WHERE image_id = ?");
     $stmt_cnt->bind_param("i", $image_id);
     $stmt_cnt->execute();
@@ -45,13 +42,11 @@ if ($action === 'save') {
     $stmt->bind_param("ii", $user_id, $image_id);
     $stmt->execute();
     if ($stmt->get_result()->num_rows > 0) {
-        // Unsave
         $stmt_del = $conn->prepare("DELETE FROM saved WHERE user_id = ? AND image_id = ?");
         $stmt_del->bind_param("ii", $user_id, $image_id);
         $stmt_del->execute();
         $is_saved = false;
     } else {
-        // Save
         $stmt_ins = $conn->prepare("INSERT INTO saved (user_id, image_id) VALUES (?, ?)");
         $stmt_ins->bind_param("ii", $user_id, $image_id);
         $stmt_ins->execute();
@@ -79,7 +74,6 @@ if ($action === 'comment') {
 }
 
 if ($action === 'get_info') {
-    // Get like count, comment count, and user states
     $stmt_cnt = $conn->prepare("SELECT COUNT(*) as cnt FROM likes WHERE image_id = ?");
     $stmt_cnt->bind_param("i", $image_id);
     $stmt_cnt->execute();
@@ -95,7 +89,6 @@ if ($action === 'get_info') {
     $stmt_save->execute();
     $is_saved = $stmt_save->get_result()->num_rows > 0;
     
-    // Get Comments
     $comments = [];
     $stmt_com = $conn->prepare("SELECT c.comment_text, u.username FROM comments c JOIN users u ON c.user_id = u.id WHERE c.image_id = ? ORDER BY c.created_at ASC");
     $stmt_com->bind_param("i", $image_id);

@@ -10,7 +10,6 @@ if (!isset($_GET['id'])) {
 $image_id = intval($_GET['id']);
 $user_id = $_SESSION['user_id'] ?? 0;
 
-// Fetch image details
 $stmt = $conn->prepare("
     SELECT i.*, u.username, c.name as category_name 
     FROM images i 

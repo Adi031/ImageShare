@@ -8,7 +8,6 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-// Auto-Login Persistent Cookie Logic (1 Week)
 if (!isset($_SESSION['user_id']) && isset($_COOKIE['remember_token'])) {
     $token = $_COOKIE['remember_token'];
     $stmt = $conn->prepare("SELECT id, username FROM users WHERE remember_token = ?");

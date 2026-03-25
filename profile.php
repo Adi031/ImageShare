@@ -9,14 +9,12 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Get uploads
 $uploads = [];
 $res_ul = $conn->query("SELECT * FROM images WHERE user_id = $user_id ORDER BY created_at DESC");
 if ($res_ul) {
     while ($r = $res_ul->fetch_assoc()) $uploads[] = $r;
 }
 
-// Get saved
 $saved = [];
 $res_sv = $conn->query("SELECT i.* FROM images i JOIN saved s ON i.id = s.image_id WHERE s.user_id = $user_id ORDER BY s.image_id DESC");
 if ($res_sv) {
