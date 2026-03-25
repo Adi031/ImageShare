@@ -37,10 +37,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error = "Error: Please select a valid file format.";
         }
     
-        // Verify file size - 5MB maximum
-        $maxsize = 5 * 1024 * 1024;
+        // Verify file size - 30MB maximum (leaving a small 2MB buffer safely under MySQL 32M packet)
+        $maxsize = 30 * 1024 * 1024;
         if ($filesize > $maxsize) {
-            $error = "Error: File size is larger than the allowed limit.";
+            $error = "Error: File size is larger than the allowed 30MB limit.";
         }
     
         // Verify MYME type of the file
@@ -52,10 +52,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt = $conn->prepare("INSERT INTO images (user_id, category_id, title, description, tags, image_data, mime_type) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmt->bind_param("iisssss", $_SESSION['user_id'], $category_id, $title, $description, $tags, $image_data, $filetype);
             
-            if ($stmt->execute()) {
-                $success = "Your file was uploaded securely to the database.";
-            } else {
-                $error = "Database Error: " . $stmt->error;
+            try {
+                if ($stmt->execute()) {
+                    $success = "Your file was uploaded securely to the database.";
+                } else {
+                    $error = "Database Error: " . $stmt->error;
+                }
+            } catch (mysqli_sql_exception $e) {
+                if (strpos($e->getMessage(), 'max_allowed_packet') !== false) {
+                    $error = "Error: This image is too large for your database's default configuration! Please try a smaller image, or increase 'max_allowed_packet' in your XAMPP MySQL my.ini file.";
+                } else {
+                    $error = "Database Exception: " . $e->getMessage();
+                }
             }
         } else if(empty($error)) {
             $error = "Error: There was a problem uploading your file. Please try again."; 
