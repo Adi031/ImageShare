@@ -17,10 +17,11 @@ $types = "";
 
 if (!empty($_GET['search'])) {
     $search = "%" . $_GET['search'] . "%";
-    $query .= " AND (i.title LIKE ? OR i.tags LIKE ?)";
+    $query .= " AND (i.title LIKE ? OR i.tags LIKE ? OR i.description LIKE ?)";
     $params[] = $search;
     $params[] = $search;
-    $types .= "ss";
+    $params[] = $search;
+    $types .= "sss";
 }
 
 if (!empty($_GET['category'])) {
@@ -95,7 +96,7 @@ if ($result) {
                             <option value="<?php echo $c['id']; ?>" <?php if(isset($_GET['category']) && $_GET['category'] == $c['id']) echo 'selected'; ?>><?php echo htmlspecialchars($c['name']); ?></option>
                         <?php endforeach; ?>
                     </select>
-                    <input type="text" name="search" class="search-input" placeholder="Search by title or tags..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
+                    <input type="text" name="search" class="search-input" placeholder="Search by title, tags, or description..." value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''; ?>">
                     <button type="submit" class="search-btn"><i class="fa-solid fa-search"></i></button>
                 </form>
             </div>

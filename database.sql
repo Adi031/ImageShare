@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS categories (
 );
 
 INSERT IGNORE INTO categories (name) VALUES 
-('Nature'), ('Technology'), ('Art'), ('Games'), ('Cars'), ('Architecture'), ('Bikes'), ('Food');
+('Nature'), ('Technology'), ('Movies'), ('Games'), ('Cars'), ('Architecture'), ('Bikes'), ('Food');
 
 CREATE TABLE IF NOT EXISTS images (
     id INT AUTO_INCREMENT PRIMARY KEY,
