@@ -119,6 +119,9 @@ if (!$img) {
             <div class="interaction-btns">
                 <button id="likeBtn" class="interaction-btn"><i class="fa-solid fa-heart"></i> <span id="likeCount">0</span></button>
                 <button id="saveBtn" class="interaction-btn"><i class="fa-solid fa-bookmark"></i> Save</button>
+                <a href="image.php?id=<?php echo $img['id']; ?>&download=1" class="interaction-btn" style="text-decoration: none; color: inherit; margin-left: auto;">
+                    <i class="fa-solid fa-download"></i> Download
+                </a>
             </div>
 
             <h4 class="mb-3" style="font-weight:700;">Comments</h4>
