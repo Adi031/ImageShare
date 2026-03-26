@@ -10,6 +10,13 @@ if (!isset($_GET['id'])) {
 $image_id = intval($_GET['id']);
 $user_id = $_SESSION['user_id'] ?? 0;
 
+$return_to = 'index.php';
+if (!empty($_GET['return']) && $_GET['return'] === 'profile') {
+    $return_to = 'profile.php';
+} elseif (!empty($_GET['return']) && $_GET['return'] === 'saved') {
+    $return_to = 'profile.php?tab=saved';
+}
+
 $stmt = $conn->prepare("
     SELECT i.*, u.username, c.name as category_name 
     FROM images i 
@@ -72,7 +79,15 @@ if (!$img) {
 
 <div class="container-fluid d-flex flex-column align-items-center justify-content-center" style="min-height: 100vh; padding: 20px;">
     <div class="w-100 mb-3" style="max-width: 1300px;">
-        <a href="javascript:history.back()" class="btn" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 30px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s;" onmouseover="this.style.background='rgba(0,0,0,0.8)'" onmouseout="this.style.background='rgba(0,0,0,0.6)'"><i class="fas fa-arrow-left"></i> Back to Gallery</a>
+        <a href="<?php echo htmlspecialchars($return_to); ?>" class="btn" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(10px); color: #fff; border: 1px solid rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 30px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s;" onmouseover="this.style.background='rgba(0,0,0,0.8)'" onmouseout="this.style.background='rgba(0,0,0,0.6)'"><i class="fas fa-arrow-left"></i> <?php 
+            if (!empty($_GET['return']) && $_GET['return'] === 'saved') {
+                echo 'Back to Saved Images';
+            } elseif (!empty($_GET['return']) && $_GET['return'] === 'profile') {
+                echo 'Back to My Uploads';
+            } else {
+                echo 'Back to Gallery';
+            }
+        ?></a>
     </div>
     <div class="view-container" style="width: 100%; max-width: 1300px; margin: 0; height: 85vh; border-radius: 24px; box-shadow: 0 25px 50px rgba(0,0,0,0.8);">
         <div class="view-image">
@@ -96,6 +111,13 @@ if (!$img) {
                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
+
+            <?php if ($user_id && $user_id == $img['user_id']): ?>
+                <div class="mb-3" style="display:flex; gap:10px;">
+                    <a href="edit_image.php?id=<?php echo $img['id']; ?>" class="btn btn-warning">Edit Details</a>
+                    <button id="deleteBtn" class="btn btn-danger">Delete Image</button>
+                </div>
+            <?php endif; ?>
 
             <div class="interaction-btns">
                 <button id="likeBtn" class="interaction-btn"><i class="fa-solid fa-heart"></i> <span id="likeCount">0</span></button>
@@ -181,6 +203,19 @@ $(document).ready(function() {
                 } else {
                     $('#saveBtn').removeClass('active').html('<i class="fa-solid fa-bookmark"></i> Save');
                 }
+            }
+        });
+    });
+
+    $('#deleteBtn').click(function() {
+        if (!confirm('Are you sure you want to delete this image? This cannot be undone.')) {
+            return;
+        }
+        $.post("api.php", { action: 'delete', image_id: currentImageId }, function(data) {
+            if (data.status === 'success') {
+                window.location.href = 'profile.php';
+            } else {
+                alert('Delete failed: ' + (data.message || 'Unknown error'));
             }
         });
     });

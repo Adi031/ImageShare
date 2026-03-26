@@ -104,4 +104,30 @@ if ($action === 'get_info') {
     exit();
 }
 
+if ($action === 'delete') {
+    $stmt = $conn->prepare("SELECT user_id FROM images WHERE id = ?");
+    $stmt->bind_param("i", $image_id);
+    $stmt->execute();
+    $img = $stmt->get_result()->fetch_assoc();
+
+    if (!$img) {
+        echo json_encode(['status' => 'error', 'message' => 'Image not found']);
+        exit();
+    }
+
+    if ($img['user_id'] != $user_id) {
+        echo json_encode(['status' => 'error', 'message' => 'Unauthorized']);
+        exit();
+    }
+
+    $stmt_del = $conn->prepare("DELETE FROM images WHERE id = ?");
+    $stmt_del->bind_param("i", $image_id);
+    if ($stmt_del->execute()) {
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Delete error: ' . $stmt_del->error]);
+    }
+    exit();
+}
+
 echo json_encode(['status' => 'error', 'message' => 'Invalid action']);

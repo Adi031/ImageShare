@@ -73,7 +73,7 @@ if ($res_sv) {
             <?php if(count($uploads) > 0): ?>
             <div class="gallery">
                     <?php foreach ($uploads as $img): ?>
-                        <a href="view.php?id=<?php echo $img['id']; ?>" class="image" style="display:block;">
+                        <a href="view.php?id=<?php echo $img['id']; ?>&return=profile" class="image" style="display:block;">
                             <img src="image.php?id=<?php echo $img['id']; ?>" alt="" />
                         </a>
                     <?php endforeach; ?>
@@ -91,7 +91,7 @@ if ($res_sv) {
             <?php if(count($saved) > 0): ?>
             <div class="gallery">
                     <?php foreach ($saved as $img): ?>
-                        <a href="view.php?id=<?php echo $img['id']; ?>" class="image" style="display:block;">
+                        <a href="view.php?id=<?php echo $img['id']; ?>&return=saved" class="image" style="display:block;">
                             <img src="image.php?id=<?php echo $img['id']; ?>" alt="" />
                         </a>
                     <?php endforeach; ?>
@@ -109,5 +109,12 @@ if ($res_sv) {
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const tab = urlParams.get('tab');
+    if (tab === 'saved') {
+        document.getElementById('saved-tab').click();
+    }
+</script>
 </body>
 </html>
