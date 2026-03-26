@@ -197,7 +197,7 @@ main {
   top: 50%; left: 50%;
   transform: translate(-50%, -50%) scale(0.9);
   max-width: 800px; width: 95%;
-  height: 90vh; /* Fixed max height to easily manage overflow without overlapping */
+  height: 90vh; 
   background: #fff;
   z-index: 2001;
   opacity: 0;

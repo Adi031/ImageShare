@@ -2,11 +2,16 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Courier New", monospace;
+  font-family: "Open Sans", sans-serif;
 }
 
 body {
-  background: radial-gradient(circle at top, #1a1a1a, #000);
+  background-color: #000;
+  background-image: url(../assets/background.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   color: #fff;
 }
 
@@ -15,13 +20,43 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 25px 60px;
+  padding: 20px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.logo {
-  font-size: 22px;
+.logo a {
+  font-size: 1.5rem;
   font-weight: bold;
+  color: #fff;
 }
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.nav-links a {
+  color: #fff;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.nav-links a:hover,
+.nav-links .active {
+  color: orange;
+}
+
+.nav-auth {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.nav-auth .action_btn {
+  padding: 0.45rem 0.9rem;
+}
+
 
 .nav-links a {
   margin: 0 15px;
